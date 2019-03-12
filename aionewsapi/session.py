@@ -73,7 +73,7 @@ class NewsApiSession(object):
         await self.close()
 
 
-    async def get_top_headlines(self, q=None, sources=None, language=None, country=None, category=None, page_size=None, page=None):
+    async def top_headlines(self, q=None, sources=None, language=None, country=None, category=None, page_size=None, page=None):
         '''
         Returns live top and breaking headlines for a country, specific category in a country, single source, or multiple sources..
 
@@ -166,7 +166,7 @@ class NewsApiSession(object):
             return await r.json()
 
 
-    async def get_everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_param=None, to=None, language=None, sort_by=None, page=None, page_size=None):
+    async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_param=None, to=None, language=None, sort_by=None, page=None, page_size=None):
         '''
         Search through millions of articles from over 5,000 large and small news sources and blogs.
 
@@ -282,7 +282,7 @@ class NewsApiSession(object):
             return await r.json()
 
 
-    async def get_sources(self, category=None, language=None, country=None):
+    async def sources(self, category=None, language=None, country=None):
         '''
             Returns the subset of news publishers that top headlines...
 
