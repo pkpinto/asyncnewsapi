@@ -111,71 +111,55 @@ class NewsApiSession(object):
 
         # Keyword/Phrase
         if q is not None:
-            if type(q) == str:
-                payload['q'] = q
-            else:
-                raise TypeError('keyword/phrase q param should be a of type str')
+            payload['q'] = str(q)
 
         # Sources
         if (sources is not None) and ((country is not None) or (category is not None)):
-            raise ValueError('cannot mix country/category param with sources parameter')
+            raise ValueError('cannot mix country/category parameter with sources parameter')
 
         # Sources
         if sources is not None:
-            if type(sources) == str:
-                payload['sources'] = sources
-            else:
-                raise TypeError('sources param should be of type str')
+            payload['sources'] = str(sources)
 
         # Language
         if language is not None:
-            if type(language) == str:
-                if language in self.LANGUAGE_OPTIONS:
-                    payload['language'] = language
-                else:
-                    raise ValueError('invalid language')
+            language = str(language)
+            if language in self.LANGUAGE_OPTIONS:
+                payload['language'] = language
             else:
-                raise TypeError('language param should be of type str')
+                raise ValueError('invalid language')
 
         # Country
         if country is not None:
-            if type(country) == str:
-                if country in self.COUNTRY_OPTIONS:
-                    payload['country'] = country
-                else:
-                    raise ValueError('invalid country')
+            country = str(country)
+            if country in self.COUNTRY_OPTIONS:
+                payload['country'] = country
             else:
-                raise TypeError('country param should be of type str')
+                raise ValueError('invalid country')
 
         # Category
         if category is not None:
-            if type(category) == str:
-                if category in self.CATEGORY_OPTIONS:
-                    payload['category'] = category
-                else:
-                    raise ValueError('invalid category')
+            category = str(category)
+            if category in self.CATEGORY_OPTIONS:
+                payload['category'] = category
             else:
-                raise TypeError('category param should be of type str')
+                raise ValueError('invalid category')
 
         # Page Size
         if page_size is not None:
-            if type(page_size) == int:
-                if 0 <= page_size <= 100:
-                    payload['pageSize'] = page_size
-                else:
-                    raise ValueError('page_size param should be an int between 1 and 100')
+            page_size = int(page_size)
+            if 0 <= page_size <= 100:
+                payload['pageSize'] = page_size
             else:
-                raise TypeError('page_size param should be an int')
+                raise ValueError('page_size should be an int between 1 and 100')
 
         # Page
         if page is not None:
-            if type(page) == int:
-                if page > 0:
-                    payload['page'] = page
-                else:
-                    raise ValueError('page param should be an int greater than 0')
+            page = int(page)
+            if page > 0:
+                payload['page'] = page
             else:
-                raise TypeError('page param should be an int')
+                raise ValueError('page should be an int greater than 0')
 
         # Send Request
         async with self.session.get(self.TOP_HEADLINES_URL, params=payload, raise_for_status=True) as r:
@@ -223,98 +207,75 @@ class NewsApiSession(object):
 
         # Keyword/Phrase
         if q is not None:
-            if type(q) == str:
-                payload['q'] = q
-            else:
-                raise TypeError('keyword/phrase q param should be of type str')
+            payload['q'] = str(q)
 
         # Sources
         if sources is not None:
-            if type(sources) == str:
-                payload['sources'] = sources
-            else:
-                raise TypeError('sources param should be of type str')
+            payload['sources'] = str(sources)
 
-        # Domains To Search
+        # Domains to search
         if domains is not None:
-            if type(domains) == str:
-                payload['domains'] = domains
-            else:
-                raise TypeError('domains param should be of type str')
+            payload['domains'] = str(domains)
 
+        # Domains to exclude
         if exclude_domains is not None:
-            if isinstance(exclude_domains, str):
-                payload['excludeDomains'] = exclude_domains
-            else:
-                raise TypeError('exclude_domains param should be of type str')
+            payload['excludeDomains'] = str(exclude_domains)
 
         # Search From This Date ...
         if from_param is not None:
-            if type(from_param) == str:
-                if (len(from_param)) >= 10:
-                    for i in range(len(from_param)):
-                        if (i == 4 and from_param[i] != '-') or (i == 7 and from_param[i] != '-'):
-                            raise ValueError('from_param should be in the format of YYYY-MM-DD')
-                        else:
-                            payload['from'] = from_param
-                else:
-                    raise ValueError('from_param should be in the format of YYYY-MM-DD')
+            from_param = str(from_param)
+            if (len(from_param)) >= 10:
+                for i in range(len(from_param)):
+                    if (i == 4 and from_param[i] != '-') or (i == 7 and from_param[i] != '-'):
+                        raise ValueError('from_param should be in the format of YYYY-MM-DD')
+                    else:
+                        payload['from'] = from_param
             else:
-                raise TypeError('from_param should be of type str')
+                raise ValueError('from_param should be in the format of YYYY-MM-DD')
 
         # ... To This Date
         if to is not None:
-            if type(to) == str:
-                if (len(to)) >= 10:
-                    for i in range(len(to)):
-                        if (i == 4 and to[i] != '-') or (i == 7 and to[i] != '-'):
-                            raise ValueError('to should be in the format of YYYY-MM-DD')
-                        else:
-                            payload['to'] = to
-                else:
-                    raise ValueError('to param should be in the format of YYYY-MM-DD')
+            to = str(to)
+            if (len(to)) >= 10:
+                for i in range(len(to)):
+                    if (i == 4 and to[i] != '-') or (i == 7 and to[i] != '-'):
+                        raise ValueError('to should be in the format of YYYY-MM-DD')
+                    else:
+                        payload['to'] = to
             else:
-                raise TypeError('to param should be of type str')
+                raise ValueError('to param should be in the format of YYYY-MM-DD')
 
         # Language
         if language is not None:
-            if type(language) == str:
-                if language not in self.LANGUAGE_OPTIONS:
-                    raise ValueError('invalid language')
-                else:
-                    payload['language'] = language
+            language = str(language)
+            if language in self.LANGUAGE_OPTIONS:
+                payload['language'] = language
             else:
-                raise TypeError('language param should be of type str')
+                raise ValueError('invalid language')
 
         # Sort Method
         if sort_by is not None:
-            if type(sort_by) == str:
-                if sort_by in self.SORTBY_OPTIONS:
-                    payload['sortBy'] = sort_by
-                else:
-                    raise ValueError('invalid sort')
+            sort_by = str(sort_by)
+            if sort_by in self.SORTBY_OPTIONS:
+                payload['sortBy'] = sort_by
             else:
-                raise TypeError('sort_by param should be of type str')
+                raise ValueError('invalid sort')
 
         # Page Size
         if page_size is not None:
-            if type(page_size) == int:
-                if 0 <= page_size <= 100:
-                    payload['pageSize'] = page_size
-                else:
-                    raise ValueError('page_size param should be an int between 1 and 100')
+            page_size = int(page_size)
+            if 0 <= page_size <= 100:
+                payload['pageSize'] = page_size
             else:
-                raise TypeError('page_size param should be an int')
+                raise ValueError('page_size should be an int between 1 and 100')
 
         # Page
         if page is not None:
-            if type(page) == int:
-                if page > 0:
-                    payload['page'] = page
-                else:
-                    raise ValueError('page param should be an int greater than 0')
+            page = int(page)
+            if page > 0:
+                payload['page'] = page
             else:
-                raise TypeError('page param should be an int')
+                raise ValueError('page should be an int greater than 0')
 
         # Send Request
         async with self.session.get(self.EVERYTHING_URL, params=payload, raise_for_status=True) as r:
@@ -336,43 +297,34 @@ class NewsApiSession(object):
                                 'ae','ar','at','au','be','bg','br','ca','ch','cn','co','cu','cz','de','eg','fr','gb','gr',
                                 'hk','hu','id','ie','il','in','it','jp','kr','lt','lv','ma','mx','my','ng','nl','no','nz',
                                 'ph','pl','pt','ro','rs','ru','sa','se','sg','si','sk','th','tr','tw','ua','us'
-
-                (str) category - The category you want to get headlines for! Valid values are:
-                                 'business','entertainment','general','health','science','sports','technology'
         '''
 
         # Define Payload
         payload = {}
 
+        # Category
+        if category is not None:
+            category = str(category)
+            if category in self.CATEGORY_OPTIONS:
+                payload['category'] = category
+            else:
+                raise ValueError('invalid category')
+
         # Language
         if language is not None:
-            if type(language) == str:
-                if language in self.LANGUAGE_OPTIONS:
-                    payload['language'] = language
-                else:
-                    raise ValueError('invalid language')
+            language = str(language)
+            if language in self.LANGUAGE_OPTIONS:
+                payload['language'] = language
             else:
-                raise TypeError('language param should be of type str')
+                raise ValueError('invalid language')
 
         # Country
         if country is not None:
-            if type(country) == str:
-                if country in self.COUNTRY_OPTIONS:
-                    payload['country'] = country
-                else:
-                    raise ValueError('invalid country')
+            country = str(country)
+            if country in self.COUNTRY_OPTIONS:
+                payload['country'] = country
             else:
-                raise TypeError('country param should be of type str')
-
-                # Category
-        if category is not None:
-            if type(category) == str:
-                if category in self.CATEGORY_OPTIONS:
-                    payload['category'] = category
-                else:
-                    raise ValueError('invalid category')
-            else:
-                raise TypeError('category param should be of type str')
+                raise ValueError('invalid country')
 
         # Send Request
         async with self.session.get(self.SOURCES_URL, params=payload, raise_for_status=True) as r:
