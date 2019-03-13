@@ -73,30 +73,36 @@ class NewsApiSession(object):
         await self.close()
 
 
-    async def top_headlines(self, q=None, sources=None, language=None, country=None, category=None, page_size=None, page=None):
+    async def top_headlines(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None):
         '''
-        Returns live top and breaking headlines for a country, specific category in a country, single source, or multiple sources..
+        Provides live top and breaking headlines for a country, specific category in a country, single source,
+        or multiple sources. You can also search with keywords. Articles are sorted by the earliest date published first.
 
         Optional parameters:
-            (str) q - return headlines w/ specific keyword or phrase. For example:
-                      'bitcoin', 'trump', 'tesla', 'ethereum', etc.
+            (str) country - The 2-letter ISO 3166-1 code of the country you want to get headlines for.
+                            Possible options:
+                            'ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de',
+                            'eg', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr', 'lt',
+                            'lv', 'ma', 'mx', 'my', 'ng', 'nl', 'no', 'nz', 'ph', 'pl', 'pt', 'ro', 'rs', 'ru',
+                            'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'.
+                            Note: you can't mix this param with the sources param.
 
-            (str) sources - return headlines of news sources! some Valid values are:
-                            'bbc-news', 'the-verge', 'abc-news', 'crypto coins news',
-                            'ary news','associated press','wired','aftenposten','australian financial review','axios',
-                            'bbc news','bild','blasting news','bloomberg','business insider','engadget','google news',
-                            'hacker news','info money,'recode','techcrunch','techradar','the next web','the verge' etc.
+            (str) category - The category you want to get headlines for.
+                             Possible options:
+                             'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'.
+                             Note: you can't mix this param with the sources param.
 
-            (str) language - The 2-letter ISO-639-1 code of the language you want to get headlines for. Valid values are:
-                             'ar','de','en','es','fr','he','it','nl','no','pt','ru','se','ud','zh'
+            (str) language - The 2-letter ISO-639-1 code of the language you want to get headlines for.
+                             Possible options:
+                             'ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'no', 'pt', 'ru', 'se', 'ud', 'zh'.
+                             Default: all languages returned.
+                             Note: this feature is undocumented in https://newsapi.org/docs/endpoints/top-headlines
 
-            (str) country - The 2-letter ISO 3166-1 code of the country you want to get headlines! Valid values are:
-                            'ae','ar','at','au','be','bg','br','ca','ch','cn','co','cu','cz','de','eg','fr','gb','gr',
-                            'hk','hu','id','ie','il','in','it','jp','kr','lt','lv','ma','mx','my','ng','nl','no','nz',
-                            'ph','pl','pt','ro','rs','ru','sa','se','sg','si','sk','th','tr','tw','ua','us'
+            (str) sources - A comma-seperated string of identifiers for the news sources or blogs you want headlines from.
+                            Use the .sources function to locate these programmatically or look at the sources index.
+                            Note: you can't mix this param with the country or category params.
 
-            (str) category - The category you want to get headlines for! Valid values are:
-                             'business','entertainment','general','health','science','sports','technology'
+            (str) q - Keywords or a phrase to search for.
 
             (int) page_size - The number of results to return per page (request). 20 is the default, 100 is the maximum.
 
@@ -106,28 +112,11 @@ class NewsApiSession(object):
         if (q is None) and (sources is None) and (language is None) and (country is None) and (category is None):
             raise ValueError('one of q, sources, language, coutry or category parameters must be provided')
 
-        # Define Payload
-        payload = {}
-
-        # Keyword/Phrase
-        if q is not None:
-            payload['q'] = str(q)
-
-        # Sources
         if (sources is not None) and ((country is not None) or (category is not None)):
             raise ValueError('cannot mix country/category parameter with sources parameter')
 
-        # Sources
-        if sources is not None:
-            payload['sources'] = str(sources)
-
-        # Language
-        if language is not None:
-            language = str(language)
-            if language in self.LANGUAGE_OPTIONS:
-                payload['language'] = language
-            else:
-                raise ValueError('invalid language')
+        # Define Payload
+        payload = {}
 
         # Country
         if country is not None:
@@ -144,6 +133,22 @@ class NewsApiSession(object):
                 payload['category'] = category
             else:
                 raise ValueError('invalid category')
+
+        # Language
+        if language is not None:
+            language = str(language)
+            if language in self.LANGUAGE_OPTIONS:
+                payload['language'] = language
+            else:
+                raise ValueError('invalid language')
+
+        # Sources
+        if sources is not None:
+            payload['sources'] = str(sources)
+
+        # Keyword/Phrase
+        if q is not None:
+            payload['q'] = str(q)
 
         # Page Size
         if page_size is not None:
@@ -166,33 +171,50 @@ class NewsApiSession(object):
             return await r.json()
 
 
-    async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_param=None, to=None, language=None, sort_by=None, page=None, page_size=None):
+    async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None):
         '''
-        Search through millions of articles from over 5,000 large and small news sources and blogs.
+        Search through millions of articles from over 30,000 large and small news sources and blogs.
+        This includes breaking news as well as lesser articles.
 
         Optional parameters:
-            (str) q - return headlines w/ specified coin! Valid values are:
-                      'bitcoin', 'trump', 'tesla', 'ethereum', etc
+            (str) q - Keywords or phrases to search for.
 
-            (str) sources - return headlines of news sources! some Valid values are:
-                            'bbc-news', 'the-verge', 'abc-news', 'crypto coins news',
-                            'ary news','associated press','wired','aftenposten','australian financial review','axios',
-                            'bbc news','bild','blasting news','bloomberg','business insider','engadget','google news',
-                            'hacker news','info money,'recode','techcrunch','techradar','the next web','the verge' etc.
+                      Advanced search is supported here:
 
-            (str) domains - A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to restrict the search to.
+                      Surround phrases with quotes (") for exact match.
+                      Prepend words or phrases that must appear with a + symbol. Eg: +bitcoin
+                      Prepend words that must not appear with a - symbol. Eg: -bitcoin
+                      Alternatively you can use the AND / OR / NOT keywords, and optionally group these with parenthesis.
+                      Eg: crypto AND (ethereum OR litecoin) NOT bitcoin.
 
-            (str) exclude_domains - A comma_seperated string of domains to be excluded from the search
+            (str) sources - A comma-seperated string of identifiers for the news sources or blogs you want headlines from.
+                            Use the .sources function to locate these programmatically or look at the sources index.
 
-            (str) from_param - A date and optional time for the oldest article allowed.
-                               (e.g. 2018-03-05 or 2018-03-05T03:46:15)
+            (str) domains - A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to restrict
+                            the search to.
+
+            (str) exclude_domains - A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to
+                                    remove from the results.
+
+            (str) from_ - A date and optional time for the oldest article allowed.
+                          This should be in ISO 8601 format (e.g. '2019-03-12' or '2019-03-12T22:00:07')
+                          Default: the oldest according to your plan.
 
             (str) to - A date and optional time for the newest article allowed.
+                       This should be in ISO 8601 format (e.g. '2019-03-12' or '2019-03-12T22:00:07')
+                       Default: the newest according to your plan.
 
-            (str) language - The 2-letter ISO-639-1 code of the language you want to get headlines for. Valid values are:
-                             'ar','de','en','es','fr','he','it','nl','no','pt','ru','se','ud','zh'
+            (str) language - The 2-letter ISO-639-1 code of the language you want to get headlines for.
+                             Possible options:
+                             'ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'no', 'pt', 'ru', 'se', 'ud', 'zh'.
+                             Default: all languages returned.
 
-            (str) sort_by - The order to sort the articles in. Valid values are: 'relevancy','popularity','publishedAt'
+            (str) sort_by - The order to sort the articles in.
+                            Possible options: 'relevancy', 'popularity', 'publishedAt'.
+                            'relevancy' = articles more closely related to q come first.
+                            'popularity' = articles from popular sources and publishers come first.
+                            'publishedAt' = newest articles come first.
+                            Default: 'publishedAt'
 
             (int) page_size - The number of results to return per page (request). 20 is the default, 100 is the maximum.
 
@@ -222,16 +244,16 @@ class NewsApiSession(object):
             payload['excludeDomains'] = str(exclude_domains)
 
         # Search From This Date ...
-        if from_param is not None:
-            from_param = str(from_param)
-            if (len(from_param)) >= 10:
-                for i in range(len(from_param)):
-                    if (i == 4 and from_param[i] != '-') or (i == 7 and from_param[i] != '-'):
-                        raise ValueError('from_param should be in the format of YYYY-MM-DD')
+        if from_ is not None:
+            from_ = str(from_)
+            if (len(from_)) >= 10:
+                for i in range(len(from_)):
+                    if (i == 4 and from_[i] != '-') or (i == 7 and from_[i] != '-'):
+                        raise ValueError('from_ should be in the format of YYYY-MM-DD')
                     else:
-                        payload['from'] = from_param
+                        payload['from'] = from_
             else:
-                raise ValueError('from_param should be in the format of YYYY-MM-DD')
+                raise ValueError('from_ should be in the format of YYYY-MM-DD')
 
         # ... To This Date
         if to is not None:
@@ -284,19 +306,26 @@ class NewsApiSession(object):
 
     async def sources(self, category=None, language=None, country=None):
         '''
-            Returns the subset of news publishers that top headlines...
+        Returns the subset of news publishers that top headlines...
 
-            Optional parameters:
-                (str) category - The category you want to get headlines for! Valid values are:
-                                 'business','entertainment','general','health','science','sports','technology'
+        Optional parameters:
+            (str) category - Find sources that display news of this category.
+                             Possible options:
+                             'business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'.
+                             Default: all categories.
 
-                (str) language - The 2-letter ISO-639-1 code of the language you want to get headlines for. Valid values are:
-                                 'ar','de','en','es','fr','he','it','nl','no','pt','ru','se','ud','zh'
+            (str) language - Find sources that display news in a specific language.
+                             Possible options:
+                             'ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'no', 'pt', 'ru', 'se', 'ud', 'zh'.
+                             Default: all languages.
 
-                (str) country - The 2-letter ISO 3166-1 code of the country you want to get headlines! Valid values are:
-                                'ae','ar','at','au','be','bg','br','ca','ch','cn','co','cu','cz','de','eg','fr','gb','gr',
-                                'hk','hu','id','ie','il','in','it','jp','kr','lt','lv','ma','mx','my','ng','nl','no','nz',
-                                'ph','pl','pt','ro','rs','ru','sa','se','sg','si','sk','th','tr','tw','ua','us'
+            (str) country - Find sources that display news in a specific country.
+                            Possible options:
+                            'ae', 'ar', 'at', 'au', 'be', 'bg', 'br', 'ca', 'ch', 'cn', 'co', 'cu', 'cz', 'de',
+                            'eg', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'it', 'jp', 'kr', 'lt',
+                            'lv', 'ma', 'mx', 'my', 'ng', 'nl', 'no', 'nz', 'ph', 'pl', 'pt', 'ro', 'rs', 'ru',
+                            'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'.
+                            Default: all countries.
         '''
 
         # Define Payload
