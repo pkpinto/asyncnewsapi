@@ -37,7 +37,7 @@
 
 import asyncio, aiohttp
 
-from aionewsapi.auth import NewsApiKeyAuth
+from asyncnewsapi.auth import NewsApiKeyAuth
 
 
 class NewsApiSession(object):
