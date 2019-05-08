@@ -166,7 +166,6 @@ class Session(object):
         async with self.session.get(self.TOP_HEADLINES_URL, params=payload, raise_for_status=True) as r:
             return await r.json()
 
-
     async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None):
         '''
         Search through millions of articles from over 30,000 large and small news sources and blogs.
@@ -298,7 +297,6 @@ class Session(object):
         # Send Request
         async with self.session.get(self.EVERYTHING_URL, params=payload, raise_for_status=True) as r:
             return await r.json()
-
 
     async def sources(self, category=None, language=None, country=None):
         '''
