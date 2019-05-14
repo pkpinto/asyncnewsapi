@@ -9,6 +9,10 @@ except FileNotFoundError as e:
     print('api.key file containing API key is missing from root of repo. '
           'Go to https://newsapi.org to create a free API key.', file=sys.stderr)
     sys.exit()
+except UnicodeDecodeError as e:
+    print('api.key is currently encrypted, unlock with git-crypt or replace it with a new key. '
+          'Go to https://newsapi.org to create a free API key.', file=sys.stderr)
+    sys.exit()
 
 
 # async test decorator - https://stackoverflow.com/a/46324983
