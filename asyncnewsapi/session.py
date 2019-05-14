@@ -35,12 +35,13 @@
 # SOFTWARE.
 
 
-import asyncio, aiohttp
+import asyncio
+import aiohttp
 
-from asyncnewsapi.auth import NewsApiKeyAuth
+from asyncnewsapi.auth import KeyAuth
 
 
-class NewsApiSession(object):
+class Session(object):
 
     TOP_HEADLINES_URL = 'https://newsapi.org/v2/top-headlines'
     EVERYTHING_URL = 'https://newsapi.org/v2/everything'
@@ -54,24 +55,19 @@ class NewsApiSession(object):
                        'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'}
     SORTBY_OPTIONS = {'relevancy', 'popularity', 'publishedAt'}
 
-
     def __init__(self, api_key, loop=None):
-        self.auth = NewsApiKeyAuth(api_key=api_key)
+        self.auth = KeyAuth(api_key=api_key)
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.session = aiohttp.ClientSession(auth=self.auth, loop=self.loop)
-
 
     async def close(self):
         await self.session.close()
 
-
     async def __aenter__(self):
         return self
 
-
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.close()
-
 
     async def top_headlines(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None):
         '''
@@ -169,7 +165,6 @@ class NewsApiSession(object):
         # Send Request
         async with self.session.get(self.TOP_HEADLINES_URL, params=payload, raise_for_status=True) as r:
             return await r.json()
-
 
     async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None):
         '''
@@ -302,7 +297,6 @@ class NewsApiSession(object):
         # Send Request
         async with self.session.get(self.EVERYTHING_URL, params=payload, raise_for_status=True) as r:
             return await r.json()
-
 
     async def sources(self, category=None, language=None, country=None):
         '''
