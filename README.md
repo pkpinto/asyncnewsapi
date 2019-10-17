@@ -4,13 +4,17 @@ An asyncio Python library to perform request against [News API](https://newsapi.
 
 It's loosely based on [newsapi-python](https://github.com/mattlisiv/newsapi-python), a requests based library by Matt Lisivick.
 
-The api.key file present in the repo is encrypted using [git-crypt](https://github.com/AGWA/git-crypt). Go to News API [website](https://newsapi.org) to create a free API key and replace the contents of this file.
+The API key should be provided as an environment variable named NEWSAPI_KEY:
+```
+export NEWSAPI_KEY="..."
+```
+Go to News API [website](https://newsapi.org) to create a free API key.
 
 
 ## Tests
 
-Unit tests for the Session class have been implemented. These can run using:
+Unit tests for the Session class have been implemented using pytest. These can run using:
 ```
-python -m unittest asyncnewsapi/tests/test_session.py 
+pytest -v
 ```
 from the root of the repo.
