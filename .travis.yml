@@ -1,10 +1,14 @@
 language: python
 python:
-- 3.7
+  - 3.7
 install:
-- pip install -r requirements.txt
-script:
-- pytest
+  - pip install -r requirements.txt
 env:
   global:
     secure: iNPVmnwr3YyYmQuk1KFIlwP8S4b81UeP/fcBLv4vt6qdInSJvPUp81bVKYuCOGFPtXqnkGFb7k7Ue9HNsvSvUUrI1GgnczZSz1B+VADTM7j7wr+Ohs3BFixfuAd7+8iQ9sRSumLQRNXFbcmAWA7HHw1fW1GWWYyfkXzKhAxNOhwRCAPvPqLXXvui8okPWLWxZtOe3wc6T1srDs/H9CKNLmetx58JaF+a1cehhpcVmqvPqh/9ln56mqlDORw0eBucaY8jv0lcA/sdX1B/z+3waTe8aw0apFG1igHQZvJFktkVJ1cRQPPTLsHo3ONnrlsOmvQe1A2wEEmc4UDFQS50mxHr5DROTTZI7/kWQMaGCxaCFdUXByq6W9UUxaAZnz4CpduQ+xnRDNXj3hTnZ5Pau/AcCJA1X8q5mw9NvX0D1KzvGD0FZDb78nm2Y6R5zTzch0e8xPlR8da3W5726CQ/8JKkS4u5r6WKZ3C8XByje3SufvSDWGyMIBwuGKRQooa2RfPzr7frvqpd5NYRIzbQl2QigEzB3VCNCahnyurbeFfhu6DEAV9lwqk46VtYVZESREACOU6HdoINYwQVhq3MBFEC6udGgyhnTBl4+pr+w9tJPPvdiRH/Ny+Z8S55dFU6XENcFP7BS9PueEyktDp0lCV4SI92kT6MmBeQXnARChg=
+# Testing command
+script:
+  - pytest --cov=./
+# Push the results to codecov
+after_success:
+  - codecov
