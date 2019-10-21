@@ -38,7 +38,7 @@
 import asyncio
 import aiohttp
 
-from asyncnewsapi.auth import APIKEY, KeyAuth
+from asyncnewsapi.auth import env_variable_api_key, KeyAuth
 
 
 class Session(object):
@@ -55,7 +55,9 @@ class Session(object):
                        'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'}
     SORTBY_OPTIONS = {'relevancy', 'popularity', 'publishedAt'}
 
-    def __init__(self, api_key=APIKEY, loop=None):
+    def __init__(self, api_key=None, loop=None):
+        if not api_key:
+            api_key = env_variable_api_key()
         self.auth = KeyAuth(api_key=api_key)
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.session = aiohttp.ClientSession(auth=self.auth, loop=self.loop)
