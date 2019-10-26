@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+
 import pytest
 
 from asyncnewsapi import Session
