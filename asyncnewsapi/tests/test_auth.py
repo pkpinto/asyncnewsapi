@@ -27,6 +27,9 @@ class TestAuth(object):
         with pytest.raises(TypeError):
             KeyAuth.from_url('https://newsapi.org/v2/top-headlines?email=john@email.com&apiKey=test_api_key')
 
+    def test_from_url_no_api_key(self):
+        assert(KeyAuth.from_url(URL('https://newsapi.org/v2/top-headlines?email=john@email.com')) is None)
+
     def test_decode(self):
         assert(KeyAuth.decode('Basic test_api_key').encode() == 'test_api_key')
 
