@@ -15,6 +15,12 @@ class TestSession(object):
             assert isinstance(api.loop, asyncio.AbstractEventLoop)
 
     @async_test
+    async def test_reuse_loop(self):
+        loop = asyncio.get_event_loop()
+        async with Session(loop=loop) as api:
+            assert api.loop == loop
+
+    @async_test
     async def test_api_key_correct(self):
         async with Session() as api:
             tasks = [api.top_headlines(language='en'), ]

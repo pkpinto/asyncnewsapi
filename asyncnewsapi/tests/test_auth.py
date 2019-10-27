@@ -23,7 +23,7 @@ class TestAuth(object):
         assert(KeyAuth.from_url(URL('https://newsapi.org/v2/top-headlines?email=john@email.com&apiKey=test_api_key')) == KeyAuth(api_key='test_api_key'))
 
     def test_from_url_uses_yarl(self):
-        '''from_url takes url as a yarnl.URL object"'''
+        '''from_url takes url as a yarnl.URL object'''
         with pytest.raises(TypeError):
             KeyAuth.from_url('https://newsapi.org/v2/top-headlines?email=john@email.com&apiKey=test_api_key')
 
