@@ -35,8 +35,10 @@
 # SOFTWARE.
 
 
-import asyncio
 import aiohttp
+import asyncio
+import async_timeout
+
 
 from asyncnewsapi.auth import env_variable_api_key, KeyAuth
 
@@ -55,12 +57,13 @@ class Session(object):
                        'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'}
     SORTBY_OPTIONS = {'relevancy', 'popularity', 'publishedAt'}
 
-    def __init__(self, api_key=None, loop=None):
+    def __init__(self, api_key=None, loop=None, timeout=None):
         if not api_key:
             api_key = env_variable_api_key()
         self.auth = KeyAuth(api_key=api_key)
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.session = aiohttp.ClientSession(auth=self.auth, loop=self.loop)
+        self.timeout = timeout
 
     async def close(self):
         await self.session.close()
@@ -71,7 +74,7 @@ class Session(object):
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.close()
 
-    async def top_headlines(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None):
+    async def top_headlines(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None, timeout=None):
         '''
         Provides live top and breaking headlines for a country, specific category in a country, single source,
         or multiple sources. You can also search with keywords. Articles are sorted by the earliest date published first.
@@ -165,10 +168,11 @@ class Session(object):
                 raise ValueError('page should be an int greater than 0')
 
         # Send Request
-        async with self.session.get(self.TOP_HEADLINES_URL, params=payload, raise_for_status=True) as r:
-            return await r.json()
+        async with async_timeout.timeout(timeout if timeout else self.timeout):
+            async with self.session.get(self.TOP_HEADLINES_URL, params=payload, raise_for_status=True) as r:
+                return await r.json()
 
-    async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None):
+    async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None, timeout=None):
         '''
         Search through millions of articles from over 30,000 large and small news sources and blogs.
         This includes breaking news as well as lesser articles.
@@ -297,10 +301,11 @@ class Session(object):
                 raise ValueError('page should be an int greater than 0')
 
         # Send Request
-        async with self.session.get(self.EVERYTHING_URL, params=payload, raise_for_status=True) as r:
-            return await r.json()
+        async with async_timeout.timeout(timeout if timeout else self.timeout):
+            async with self.session.get(self.EVERYTHING_URL, params=payload, raise_for_status=True) as r:
+                return await r.json()
 
-    async def sources(self, category=None, language=None, country=None):
+    async def sources(self, category=None, language=None, country=None, timeout=None):
         '''
         Returns the subset of news publishers that top headlines...
 
@@ -352,5 +357,6 @@ class Session(object):
                 raise ValueError('invalid country')
 
         # Send Request
-        async with self.session.get(self.SOURCES_URL, params=payload, raise_for_status=True) as r:
-            return await r.json()
+        async with async_timeout.timeout(timeout if timeout else self.timeout):
+            async with self.session.get(self.SOURCES_URL, params=payload, raise_for_status=True) as r:
+                return await r.json()
