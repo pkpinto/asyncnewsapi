@@ -43,7 +43,7 @@ import async_timeout
 from asyncnewsapi.auth import env_variable_api_key, KeyAuth
 
 
-class Session(object):
+class Session:
 
     TOP_HEADLINES_URL = 'https://newsapi.org/v2/top-headlines'
     EVERYTHING_URL = 'https://newsapi.org/v2/everything'

@@ -8,7 +8,7 @@ from asyncnewsapi import Session
 from asyncnewsapi.tests import async_test
 
 
-class TestSession(object):
+class TestSession:
 
     @async_test
     async def test_loop(self):
