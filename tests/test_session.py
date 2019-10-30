@@ -5,7 +5,7 @@ from async_timeout import timeout
 import pytest
 
 from asyncnewsapi import Session
-from asyncnewsapi.tests import async_test
+from tests import async_test
 
 
 class TestSession:
