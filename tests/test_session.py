@@ -24,20 +24,18 @@ class TestSession:
     @async_test
     async def test_api_key_correct(self):
         async with Session() as api:
-            tasks = [api.top_headlines(language='en'), ]
-            await asyncio.gather(*tasks)
+            x = await api.top_headlines(language='en')
+            assert x['status'] == 'ok'
 
     @async_test
     async def test_api_key_incorrect(self):
         async with Session(api_key='1' * 32) as api:
-            tasks = [api.top_headlines(language='en'), ]
             with pytest.raises(aiohttp.client_exceptions.ClientResponseError):
-                await asyncio.gather(*tasks)
+                await api.top_headlines(language='en')
 
     @async_test
     async def test_timeout_inner_timeout_error(self):
         with pytest.raises(asyncio.TimeoutError):
-                async with Session(timeout=0.01) as api:
-                    # something that will take a long time
-                    tasks = [api.top_headlines(language='en'), ] * 100
-                    await asyncio.gather(*tasks)
+            # do not give the task enough time to complete
+            async with Session(timeout=0.001) as api:
+                await api.top_headlines(language='en')
