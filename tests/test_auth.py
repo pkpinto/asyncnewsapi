@@ -13,7 +13,7 @@ def test_env_variable_api_key(monkeypatch):
         env_variable_api_key()
 
 
-class TestAuth(object):
+class TestAuth:
 
     def test_api_key_not_none(self):
         with pytest.raises(ValueError):
