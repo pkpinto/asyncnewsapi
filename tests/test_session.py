@@ -24,18 +24,21 @@ class TestSession:
     @async_test
     async def test_api_key_correct(self):
         async with Session() as api:
-            x = await api.top_headlines(language='en')
-            assert x['status'] == 'ok'
+            async for r in api.top_headlines(language='en'):
+                assert 'title' in r.keys()
+                break
 
     @async_test
     async def test_api_key_incorrect(self):
         async with Session(api_key='1' * 32) as api:
             with pytest.raises(aiohttp.client_exceptions.ClientResponseError):
-                await api.top_headlines(language='en')
+                async for r in api.top_headlines(language='en'):
+                    break
 
     @async_test
     async def test_timeout_inner_timeout_error(self):
         with pytest.raises(asyncio.TimeoutError):
             # do not give the task enough time to complete
             async with Session(timeout=0.001) as api:
-                await api.top_headlines(language='en')
+                async for r in api.top_headlines(language='en'):
+                    break
