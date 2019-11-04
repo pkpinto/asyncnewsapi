@@ -6,15 +6,23 @@
 
 An asyncio Python library to perform request against [News API](https://newsapi.org). It provides direct access to the endpoints defined in the [documentation](https://newsapi.org/docs/endpoints), returning async iterators for the request results. A minimal implementation can be as simple as:
 ```
+import aiohttp
 import asyncio
+
 from asyncnewsapi.session import Session
 
 async def main():
     async with Session() as api:
         i = 1
-        async for article in api.top_headlines(language='pt'):
-            print('{}: {}'.format(i, article['title']))
-            i += 1
+        try:
+            async for article in api.top_headlines(language='en'):
+                print('{}: {}'.format(i, article['title']))
+                i += 1
+        except aiohttp.client_exceptions.ClientResponseError as e:
+            if e.status == 426:
+                print('Upgrade Required: free account can only download 100 articles per request')
+            else:
+                raise e
 
 if __name__ == '__main__':
     asyncio.run(main())
