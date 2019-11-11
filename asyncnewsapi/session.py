@@ -73,20 +73,6 @@ class Session:
         await self.close()
 
     async def top_headlines(self, country=None, category=None, language=None, sources=None, q=None, page_size=20, timeout=None):
-        # get first result page to check number of results
-        r = await self._top_headlines_req(country=country, category=category, language=language, sources=sources, q=q, page_size=page_size, page=1, timeout=timeout)
-        for article in r['articles']:
-            yield article
-        # paginate
-        if r['totalResults'] > page_size:
-            p = 2
-            while len(r['articles']) > 0:
-                r = await self._top_headlines_req(country=country, category=category, language=language, sources=sources, q=q, page_size=page_size, page=p, timeout=timeout)
-                for article in r['articles']:
-                    yield article
-                p += 1
-
-    async def _top_headlines_req(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None, timeout=None):
         '''
         Provides live top and breaking headlines for a country, specific category in a country, single source,
         or multiple sources. You can also search with keywords. Articles are sorted by the earliest date published first.
@@ -121,6 +107,30 @@ class Session:
 
             (int) page - Use this to page through the results if the total results found is greater than the page size.
         '''
+        logger = logging.getLogger(__name__)
+        # get first result page to check number of results
+        r = await self._top_headlines_req(country=country, category=category, language=language, sources=sources, q=q, page_size=page_size, page=1, timeout=timeout)
+        for article in r['articles']:
+            yield article
+        # paginate
+        if r['totalResults'] > page_size:
+            p = 2
+            while len(r['articles']) > 0:
+                try:
+                    r = await self._top_headlines_req(country=country, category=category, language=language, sources=sources, q=q, page_size=page_size, page=p, timeout=timeout)
+                except aiohttp.client_exceptions.ClientResponseError as e:
+                    if e.status == 426:
+                        logger.error('Upgrade required: free account can only download 100 articles per request')
+                        # raising StopIteration during handling of exception goes uncaugth, empty the list of articles instead
+                        r['articles'] = []
+                    else:
+                        raise e
+                finally:
+                    for article in r['articles']:
+                        yield article
+                    p += 1
+
+    async def _top_headlines_req(self, country=None, category=None, language=None, sources=None, q=None, page_size=None, page=None, timeout=None):
         logger = logging.getLogger(__name__)
 
         if (q is None) and (sources is None) and (language is None) and (country is None) and (category is None):
@@ -187,20 +197,6 @@ class Session:
                 return await r.json()
 
     async def everything(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page_size=20, timeout=None):
-       # get first result page to check number of results
-        r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=1, page_size=page_size, timeout=timeout)
-        for article in r['articles']:
-            yield article
-        # paginate
-        if r['totalResults'] > page_size:
-            p = 2
-            while len(r['articles']) > 0:
-                r = await self._everything_req(self, q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=p, page_size=page_size, timeout=timeout)
-                for article in r['articles']:
-                    yield article
-                p += 1
-
-    async def _everything_req(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None, timeout=None):
         '''
         Search through millions of articles from over 30,000 large and small news sources and blogs.
         This includes breaking news as well as lesser articles.
@@ -249,6 +245,30 @@ class Session:
 
             (int) page - Use this to page through the results if the total results found is greater than the page size.
         '''
+        logger = logging.getLogger(__name__)
+        # get first result page to check number of results
+        r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=1, page_size=page_size, timeout=timeout)
+        for article in r['articles']:
+            yield article
+        # paginate
+        if r['totalResults'] > page_size:
+            p = 2
+            while len(r['articles']) > 0:
+                try:
+                    r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=p, page_size=page_size, timeout=timeout)
+                except aiohttp.client_exceptions.ClientResponseError as e:
+                    if e.status == 426:
+                        logger.error('Upgrade required: free account can only download 100 articles per request')
+                        # raising StopIteration during handling of exception goes uncaugth, empty the list of articles instead
+                        r['articles'] = []
+                    else:
+                        raise e
+                finally:
+                    for article in r['articles']:
+                        yield article
+                    p += 1
+
+    async def _everything_req(self, q=None, sources=None, domains=None, exclude_domains=None, from_=None, to=None, language=None, sort_by=None, page=None, page_size=None, timeout=None):
         logger = logging.getLogger(__name__)
 
         if (q is None) and (sources is None) and (domains is None):
@@ -336,13 +356,10 @@ class Session:
                 return await r.json()
 
     async def sources(self, category=None, language=None, country=None, timeout=None):
-        r = await self._sources_req(category=category, language=language, country=country, timeout=timeout)
-        for source in r['sources']:
-            yield source
-
-    async def _sources_req(self, category=None, language=None, country=None, timeout=None):
         '''
-        Returns the subset of news publishers that top headlines...
+        Returns the subset of news publishers that top headlines are available from.
+        It's mainly a convenience endpoint that you can use to keep track of the publishers available on the API,
+        and you can pipe it straight through to your users.
 
         Optional parameters:
             (str) category - Find sources that display news of this category.
@@ -363,6 +380,11 @@ class Session:
                             'sa', 'se', 'sg', 'si', 'sk', 'th', 'tr', 'tw', 'ua', 'us', 've', 'za'.
                             Default: all countries.
         '''
+        r = await self._sources_req(category=category, language=language, country=country, timeout=timeout)
+        for source in r['sources']:
+            yield source
+
+    async def _sources_req(self, category=None, language=None, country=None, timeout=None):
         logger = logging.getLogger(__name__)
 
         # Define Payload

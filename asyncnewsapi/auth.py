@@ -12,8 +12,6 @@ def env_variable_api_key():
         logger = logging.getLogger(__name__)
         logger.critical('The NEWSAPI_KEY environment variable is not set, it should contain the API key. '
                         'Go to https://newsapi.org to create a free API key.')
-        print('The NEWSAPI_KEY environment variable is not set, it should contain the API key. '
-              'Go to https://newsapi.org to create a free API key.', file=sys.stderr)
         sys.exit()
     return api_key
 
