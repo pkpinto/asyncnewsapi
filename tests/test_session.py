@@ -1,7 +1,7 @@
-import aiohttp
 import asyncio
-from async_timeout import timeout
 
+import aiohttp
+from async_timeout import timeout
 import pytest
 
 from asyncnewsapi import Session

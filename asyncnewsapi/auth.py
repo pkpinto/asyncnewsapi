@@ -1,8 +1,8 @@
-import aiohttp
 import logging
 import os
 import sys
 
+import aiohttp
 from yarl import URL
 
 

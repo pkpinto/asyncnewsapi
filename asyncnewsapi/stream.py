@@ -1,7 +1,8 @@
-import aiohttp
 import asyncio
 from collections import deque
 import logging
+
+import aiohttp
 
 from asyncnewsapi.session import Session
 

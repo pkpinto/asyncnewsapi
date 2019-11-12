@@ -34,6 +34,6 @@ This library is loosely based on / inspired by [newsapi-python](https://github.c
 
 Unit tests for the Session class have been implemented using pytest. These can run using:
 ```
-pytest -v
+pytest -v tests/
 ```
-from the root of the repo.
+from the root of the repo (avoids interference with the venv folders).

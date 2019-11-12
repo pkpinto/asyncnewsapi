@@ -35,10 +35,11 @@
 # SOFTWARE.
 
 
-import aiohttp
 import asyncio
-import async_timeout
 import logging
+
+import aiohttp
+import async_timeout
 
 from asyncnewsapi.auth import env_variable_api_key, KeyAuth
 
