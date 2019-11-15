@@ -1,6 +1,6 @@
 # asyncnewsapi
 
-[![Build Status](https://travis-ci.org/pkpinto/asyncnewsapi.svg?branch=master)](https://travis-ci.com/pkpinto/asyncnewsapi)
+[![Build Status](https://travis-ci.org/pkpinto/asyncnewsapi.svg?branch=master)](https://travis-ci.org/pkpinto/asyncnewsapi)
 [![Code Coverage](https://codecov.io/gh/pkpinto/asyncnewsapi/branch/master/graph/badge.svg)](https://codecov.io/gh/pkpinto/asyncnewsapi)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Join the chat at https://gitter.im/asyncnewsapi/community](https://badges.gitter.im/asyncnewsapi/community.svg)](https://gitter.im/asyncnewsapi/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
