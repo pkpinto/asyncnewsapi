@@ -11,7 +11,7 @@ Two classes are implemented, returning async iterators for the request results. 
 ```
 import asyncio
 
-from asyncnewsapi.session import Session
+from asyncnewsapi import Session
 
 async def main():
     async with Session() as api:
