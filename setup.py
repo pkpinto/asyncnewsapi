@@ -24,5 +24,5 @@ setuptools.setup(
     author_email='paulo.kauscher.pinto@icloud.com',
     license='Apache License 2.0',
     packages=['asyncnewsapi'],
-    install_requires=['aiohttp>=3.5,<4'],
+    install_requires=['aiohttp>=3.5,<4', 'pytest<5.3'],
 )

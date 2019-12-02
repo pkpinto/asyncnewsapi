@@ -1,8 +1,9 @@
 # asyncnewsapi
 
-[![Build Status](https://travis-ci.org/pkpinto/asyncnewsapi.svg?branch=master)](https://travis-ci.org/pkpinto/asyncnewsapi)
-[![Code Coverage](https://codecov.io/gh/pkpinto/asyncnewsapi/branch/master/graph/badge.svg)](https://codecov.io/gh/pkpinto/asyncnewsapi)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://travis-ci.org/pkpinto/asyncnewsapi.svg?branch=master)](https://travis-ci.org/pkpinto/asyncnewsapi)
+[![PyPI version](https://badge.fury.io/py/asyncnewsapi.svg)](https://badge.fury.io/py/asyncnewsapi)
+[![Code Coverage](https://codecov.io/gh/pkpinto/asyncnewsapi/branch/master/graph/badge.svg)](https://codecov.io/gh/pkpinto/asyncnewsapi)
 [![Join the chat at https://gitter.im/asyncnewsapi/community](https://badges.gitter.im/asyncnewsapi/community.svg)](https://gitter.im/asyncnewsapi/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 An asyncio Python library to perform request against [News API](https://newsapi.org). It provides direct access to the endpoints defined in the [documentation](https://newsapi.org/docs/endpoints). 
@@ -26,7 +27,7 @@ The API key should be provided as an environment variable named NEWSAPI_KEY:
 ```
 export NEWSAPI_KEY="..."
 ```
-Go to News API [website](https://newsapi.org) to create a free API key.
+Go to the NewsAPI [website](https://newsapi.org) to create a free API key.
 
 This library is loosely based on / inspired by [newsapi-python](https://github.com/mattlisiv/newsapi-python), a requests based library by Matt Lisivick.
 
@@ -36,4 +37,4 @@ Unit tests for the Session class have been implemented using pytest. These can r
 ```
 pytest -v tests/
 ```
-from the root of the repo (avoids interference with the venv folders).
+from the root of the repo (running it explicitly on the tests/ directory avoids interference with the venv folders).
