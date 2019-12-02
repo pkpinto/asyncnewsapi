@@ -3,6 +3,12 @@
 import setuptools
 
 
+INSTALL_REQUIRES = ['aiohttp>=3.5,<4']
+TEST_REQUIRES = [
+    # testing and coverage
+    'pytest<5.3', 'coverage', 'pytest-cov',
+]
+
 with open('README.md', 'r') as f:
     long_description = f.read()
 
@@ -24,5 +30,8 @@ setuptools.setup(
     author_email='paulo.kauscher.pinto@icloud.com',
     license='Apache License 2.0',
     packages=['asyncnewsapi'],
-    install_requires=['aiohttp>=3.5,<4'],
+    install_requires=INSTALL_REQUIRES,
+    extras_require={
+        'test': TEST_REQUIRES + INSTALL_REQUIRES,
+    },
 )
