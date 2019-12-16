@@ -4,13 +4,21 @@ python:
 before_install:
   - pip install --upgrade pip
 install:
+  # include extras_require test
   - pip install ".[test]"
 env:
   global:
+    # NewsAPI token
     secure: iNPVmnwr3YyYmQuk1KFIlwP8S4b81UeP/fcBLv4vt6qdInSJvPUp81bVKYuCOGFPtXqnkGFb7k7Ue9HNsvSvUUrI1GgnczZSz1B+VADTM7j7wr+Ohs3BFixfuAd7+8iQ9sRSumLQRNXFbcmAWA7HHw1fW1GWWYyfkXzKhAxNOhwRCAPvPqLXXvui8okPWLWxZtOe3wc6T1srDs/H9CKNLmetx58JaF+a1cehhpcVmqvPqh/9ln56mqlDORw0eBucaY8jv0lcA/sdX1B/z+3waTe8aw0apFG1igHQZvJFktkVJ1cRQPPTLsHo3ONnrlsOmvQe1A2wEEmc4UDFQS50mxHr5DROTTZI7/kWQMaGCxaCFdUXByq6W9UUxaAZnz4CpduQ+xnRDNXj3hTnZ5Pau/AcCJA1X8q5mw9NvX0D1KzvGD0FZDb78nm2Y6R5zTzch0e8xPlR8da3W5726CQ/8JKkS4u5r6WKZ3C8XByje3SufvSDWGyMIBwuGKRQooa2RfPzr7frvqpd5NYRIzbQl2QigEzB3VCNCahnyurbeFfhu6DEAV9lwqk46VtYVZESREACOU6HdoINYwQVhq3MBFEC6udGgyhnTBl4+pr+w9tJPPvdiRH/Ny+Z8S55dFU6XENcFP7BS9PueEyktDp0lCV4SI92kT6MmBeQXnARChg=
-# Testing command
+# testing command
 script:
-  - pytest tests/ --cov=./
-# Push the results to codecov
+  - pytest tests/ --cov=asyncnewsapi/
+# push the results to codecov
 after_success:
   - codecov
+deploy:
+  password:
+    # PyPi token
+    secure: tTUrIJVL+eCLMR8pZksmh2mPfe3l9WzeWIzIWDWgmdBq5YRMytP18cYNWLrUmIOC4aO9aWSz+487Brf3T8EUAjAJGMHTityZV25au5l83NhU7Iy3sJOpiM1psiwDsSFxcHVSkKMAsF+9MYU2tID5qIb/ao6nVXHUWC5gkfIyHquW7MVZf7yiQjVtWDFyRKAAKKzvX/T0m+3w4MvnEXnZBvoFwNxF3FLEZOZ6Z8Enoi8M4PVCSBSnIm6L/0rp85ShB9yNB5/rg5Er2k3D4c8TIS/g+pbmRYtbM8/tQHShRUfPPw2lRvppFtp7+E1PP97xV6Yq1Ui0zl0bE2KzSBEqVJQt4f8Or3h0E0BOrJkudx2r9ajg1vVZ3qe5zd1XGNctQZd+053FqXGWmQUn+0WyKfHLpaxjj110VrE9TP1x5JxQCg+bnQfU3FPL/+Z724OugA7/7I1ex1obf40Dtyj5uVlwwM6YYsKGsFrYNSrRX3jHIxvlZugNx6CTrhVgGnkth7aiCzJjGOOnuCbeM0CtCPSSHttT5SVqTbZZ1XI2OrfJQReIp3LqzHPnnBPNOHxsaR6KTu7SiKCvBMXKSjCk+YgwSNUxGWkUWaeuvo972dSFs80IeSez9ARdX+hlz2eDsP6TcuzTsyMlbUbyivBaejblYfmSLdAVdgBqzRHA9jg=
+  on:
+    tags: true

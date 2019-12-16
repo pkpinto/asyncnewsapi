@@ -3,7 +3,9 @@
 import setuptools
 
 
-INSTALL_REQUIRES = ['aiohttp>=3.5,<4']
+INSTALL_REQUIRES = [
+    'aiohttp>=3.5,<4', 'async_timeout', 'yarl'
+]
 TEST_REQUIRES = [
     # testing and coverage
     'pytest<5.3', 'coverage', 'pytest-cov',
@@ -14,12 +16,12 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='asyncnewsapi',
-    version='0.1',
+    version='0.2',
     description='AsyncIO Python wrapper to News API',
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
