@@ -3,6 +3,8 @@ python:
   - 3.7
 before_install:
   - pip install --upgrade pip
+  # to interact with codecov
+  - pip install codecov
 install:
   # include extras_require test
   - pip install ".[test]"
