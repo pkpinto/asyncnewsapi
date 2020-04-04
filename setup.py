@@ -8,7 +8,7 @@ INSTALL_REQUIRES = [
 ]
 TEST_REQUIRES = [
     # testing and coverage
-    'pytest<5.3', 'coverage', 'pytest-cov',
+    'pytest<5.3', 'coverage', 'pytest-cov', 'pylint',
 ]
 
 with open('README.md', 'r') as f:
