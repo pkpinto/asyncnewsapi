@@ -32,7 +32,7 @@ class TestSession:
     async def test_api_key_incorrect(self):
         async with Session(api_key='1' * 32) as api:
             with pytest.raises(aiohttp.client_exceptions.ClientResponseError):
-                async for r in api.top_headlines(language='en'):
+                async for _ in api.top_headlines(language='en'):
                     break
 
     @async_test
@@ -40,5 +40,5 @@ class TestSession:
         with pytest.raises(asyncio.TimeoutError):
             # do not give the task enough time to complete
             async with Session(timeout=0.001) as api:
-                async for r in api.top_headlines(language='en'):
+                async for _ in api.top_headlines(language='en'):
                     break

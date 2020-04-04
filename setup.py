@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import setuptools
+from setuptools import setup, find_namespace_packages
 
 
 INSTALL_REQUIRES = [
@@ -8,13 +8,13 @@ INSTALL_REQUIRES = [
 ]
 TEST_REQUIRES = [
     # testing and coverage
-    'pytest<5.3', 'coverage', 'pytest-cov',
+    'pytest<5.3', 'coverage', 'pytest-cov', 'pylint',
 ]
 
 with open('README.md', 'r') as f:
     long_description = f.read()
 
-setuptools.setup(
+setup(
     name='asyncnewsapi',
     version='0.2',
     description='AsyncIO Python wrapper to News API',
@@ -31,7 +31,9 @@ setuptools.setup(
     author='Paulo Kauscher Pinto',
     author_email='paulo.kauscher.pinto@icloud.com',
     license='Apache License 2.0',
-    packages=['asyncnewsapi'],
+    package_dir={'': 'src'},
+    packages=find_namespace_packages(where='src'),
+#    packages=['asyncnewsapi'],
     install_requires=INSTALL_REQUIRES,
     extras_require={
         'test': TEST_REQUIRES + INSTALL_REQUIRES,

@@ -31,10 +31,26 @@ Go to the NewsAPI [website](https://newsapi.org) to create a free API key.
 
 This library is loosely based on / inspired by [newsapi-python](https://github.com/mattlisiv/newsapi-python), a requests based library by Matt Lisivick.
 
+## Installation
+
+Use pip to install this package, either directly from pypi:
+```
+pip install asyncnewsapi
+```
+or after cloning from github:
+```
+pip install .
+```
+
 ## Tests
 
-Unit tests for the Session class have been implemented using pytest. These can run using:
+Unit tests have been implemented using pytest. To run them, additional dependencies need be installed:
 ```
-pytest -v tests/
+pip install ".[test]"
+```
+
+The tests can then be run using:
+```
+python -m pytest -v tests/
 ```
 from the root of the repo (running it explicitly on the tests/ directory avoids interference with the venv folders).
