@@ -4,7 +4,9 @@
 [![Build Status](https://travis-ci.org/pkpinto/asyncnewsapi.svg?branch=master)](https://travis-ci.org/pkpinto/asyncnewsapi)
 [![PyPI version](https://badge.fury.io/py/asyncnewsapi.svg)](https://badge.fury.io/py/asyncnewsapi)
 [![Code Coverage](https://codecov.io/gh/pkpinto/asyncnewsapi/branch/master/graph/badge.svg)](https://codecov.io/gh/pkpinto/asyncnewsapi)
-[![Join the chat at https://gitter.im/asyncnewsapi/community](https://badges.gitter.im/asyncnewsapi/community.svg)](https://gitter.im/asyncnewsapi/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+https://gitter.im/pkpintoHUB/asyncnewsapi
+
+[![Join the chat at https://gitter.im/pkpintoHUB/asyncnewsapi](https://badges.gitter.im/pkpintoHUB/asyncnewsapi.svg)](https://gitter.im/pkpintoHUB/asyncnewsapi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 An asyncio Python library to perform request against [News API](https://newsapi.org). It provides direct access to the endpoints defined in the [documentation](https://newsapi.org/docs/endpoints). 
 
