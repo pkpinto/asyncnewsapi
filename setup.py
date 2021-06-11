@@ -8,7 +8,7 @@ INSTALL_REQUIRES = [
 ]
 TEST_REQUIRES = [
     # testing and coverage
-    'pytest<5.3', 'coverage', 'pytest-cov', 'pylint',
+    'pytest<5.3', 'pytest-cov',
 ]
 
 with open('README.md', 'r') as f:
@@ -16,7 +16,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='asyncnewsapi',
-    version='0.2',
+    version='0.2.1',
     description='AsyncIO Python wrapper to News API',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -33,7 +33,6 @@ setup(
     license='Apache License 2.0',
     package_dir={'': 'src'},
     packages=find_namespace_packages(where='src'),
-#    packages=['asyncnewsapi'],
     install_requires=INSTALL_REQUIRES,
     extras_require={
         'test': TEST_REQUIRES + INSTALL_REQUIRES,

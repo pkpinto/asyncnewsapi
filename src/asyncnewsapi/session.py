@@ -248,7 +248,8 @@ class Session:
         '''
         logger = logging.getLogger(__name__)
         # get first result page to check number of results
-        r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=1, page_size=page_size, timeout=timeout)
+        r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to,
+                                       language=language, sort_by=sort_by, page=1, page_size=page_size, timeout=timeout)
         for article in r['articles']:
             yield article
         # paginate
@@ -256,7 +257,8 @@ class Session:
             p = 2
             while len(r['articles']) > 0:
                 try:
-                    r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to, language=language, sort_by=sort_by, page=p, page_size=page_size, timeout=timeout)
+                    r = await self._everything_req(q=q, sources=sources, domains=domains, exclude_domains=exclude_domains, from_=from_, to=to,
+                                                   language=language, sort_by=sort_by, page=p, page_size=page_size, timeout=timeout)
                 except aiohttp.client_exceptions.ClientResponseError as e:
                     if e.status == 426:
                         logger.error('Upgrade required: free account can only download 100 articles per request')

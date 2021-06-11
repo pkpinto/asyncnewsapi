@@ -15,6 +15,7 @@ def env_variable_api_key():
         sys.exit()
     return api_key
 
+
 class KeyAuth(aiohttp.BasicAuth):
     '''Http API key authentication helper. Derives from BasicAuth because aiohttp checks isinstance'''
 
